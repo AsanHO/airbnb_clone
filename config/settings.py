@@ -39,8 +39,16 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
+THIRD_PARTY_APPS = ["django_countries"]
+
 PROJECT_APPS = [
+    "core.apps.CoreConfig",
     "users.apps.UsersConfig",
+    "rooms.apps.RoomsConfig",
+    "reviews.apps.ReviewsConfig",
+    "reservations.apps.ReservationsConfig",
+    "lists.apps.ListsConfig",
+    "conversations.apps.ConversationsConfig",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS
@@ -131,3 +139,8 @@ AUTH_USER_MODEL = "users.User"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+MEDIA_ROOT = BASE_DIR / "uploads"  # 사용자 업로드 파일을 저장할 디렉토리의 절대 파일 시스템 경로 입니다.
+
+MEDIA_URL = "/media/"  # 절대경로, 상대경로는 무엇인가

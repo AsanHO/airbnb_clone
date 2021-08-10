@@ -2,7 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
-class User(AbstractUser):
+class User(AbstractUser):  # 이미 로그인 기능이 있다.
     """Custom User Model"""
 
     GENDER_MALE = "male"
@@ -25,16 +25,12 @@ class User(AbstractUser):
 
     CURRENCY_CHOICES = ((CURRENCY_USD, "usd"), (CURRENCY_KRW, "krw"))
 
-    avatar = models.ImageField(null=True, blank=True)
-    gender = models.CharField(
-        choices=GENDER_CHOICES, max_length=10, null=True, blank=True
-    )
-    bio = models.TextField(default="")
+    avatar = models.ImageField(
+        blank=True, upload_to="avatar"
+    )  # 굿~!여기에 업로드 한 사진은 avatar에 저장해줌!
+    gender = models.CharField(choices=GENDER_CHOICES, max_length=10, blank=True)
+    bio = models.TextField(default="", blank=True)
     date = models.DateField(null=True)
-    language = models.CharField(
-        choices=LANGUAGE_CHOICES, max_length=3, null=True, blank=True
-    )
-    currency = models.CharField(
-        choices=CURRENCY_CHOICES, max_length=3, null=True, blank=True
-    )
-    suprehost = models.BooleanField(default=False)
+    language = models.CharField(choices=LANGUAGE_CHOICES, max_length=3, blank=True)
+    currency = models.CharField(choices=CURRENCY_CHOICES, max_length=3, blank=True)
+    superhost = models.BooleanField(default=False)
