@@ -27,10 +27,20 @@ class RoomAdmin(admin.ModelAdmin):
 
     inlines = (PhotoInline,)
 
-    fieldsets = (
+    fieldsets = (  # 중복되는 모델이 있으면 안된다!!
         (
             "Basic Info",
-            {"fields": ("name", "description", "country", "city", "address", "price")},
+            {
+                "fields": (
+                    "name",
+                    "description",
+                    "country",
+                    "city",
+                    "address",
+                    "price",
+                    "room_type",
+                )
+            },
         ),
         ("Times", {"fields": ("check_in", "check_out", "instant_book")}),
         ("Spaces", {"fields": ("guests", "beds", "bedrooms", "baths")}),
@@ -38,7 +48,7 @@ class RoomAdmin(admin.ModelAdmin):
             "More About the Space",
             {
                 "classes": ("collapse",),
-                "fields": ("room_Type", "amenities", "facilities", "house_rules"),
+                "fields": ("amenities", "facilities", "house_rules"),
             },
         ),
         ("Last Details", {"fields": ("host",)}),
@@ -67,7 +77,7 @@ class RoomAdmin(admin.ModelAdmin):
     )
     list_filter = (
         "host__superhost",  # 유저의 슈퍼호스트도 조회가능, 어째서 슈프레호스트에서 오탈자를 수정하면 오류가 생기는 것인지 의문.
-        "room_Type",
+        "room_type",
         "amenities",
         "facilities",
         "house_rules",
@@ -87,6 +97,8 @@ class RoomAdmin(admin.ModelAdmin):
 
     def count_amenities(self, obj):
         return obj.amenities.count()
+
+    count_amenities.short_description = "Amenity Count"
 
     def count_photos(self, obj):
         return obj.photos.count()

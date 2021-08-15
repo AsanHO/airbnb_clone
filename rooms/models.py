@@ -20,7 +20,8 @@ class RoomType(AbstractItem):
 
     """RoomType Object Definition"""
 
-    pass
+    class Meta:
+        verbose_name = "Room Type"
 
 
 class Amenity(AbstractItem):
@@ -89,7 +90,7 @@ class Room(core_models.TimeStampedModel):  # 코어를 사용함으로써 타임
         default=True,
     )  # cascade 삭제됬을시 유저와 관련된 모든 룸을 다같이 삭제함
     # 호스트가 유저이므로 서로 연결해줘야함 포린키
-    room_Type = models.ForeignKey(
+    room_type = models.ForeignKey(
         "RoomType", related_name="rooms", on_delete=models.SET_NULL, null=True
     )  # 한개의 방은 하나의 룸타임만 가질 수 있음
     amenities = models.ManyToManyField("Amenity", related_name="rooms", blank=True)
@@ -107,6 +108,8 @@ class Room(core_models.TimeStampedModel):  # 코어를 사용함으로써 타임
     def total_rating(self):  # 와오 리뷰 평균 점수를 합한 평균
         all_reviews = self.reviews.all()  # ㄷ 리뷰 어드민에 related_name이 있는것 만으로 임포트가 됨
         all_ratings = 0
-        for review in all_reviews:
-            all_ratings += review.rating_average()
-        return all_ratings / len(all_reviews)
+        if len(all_reviews) > 0:
+            for review in all_reviews:
+                all_ratings += review.rating_average()
+            return round((all_ratings / len(all_reviews)), 2)
+        return 0
