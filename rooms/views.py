@@ -1,27 +1,32 @@
-from math import ceil
+from django.views.generic import ListView
 from django.shortcuts import render
 from . import models
 
 
+class HomeView(ListView):
+
+    """HomeView Definition"""
+
+    model = models.Room
+    paginate_by = 10
+    paginate_orphans = 5
+    ordering = "created"
+    context_object_name = "rooms"
+
+
+def room_detail(request, pk):
+    print(pk)
+    return render(request, "rooms/detail.html")
+
+
+"""
+
 def all_rooms(request):  # 함수명 마음대로
-    page = int(
-        request.GET.get("page", 1)
-    )  # http://127.0.0.1:8000/?page=2 의 페이지 숫자로 url 구성
-    page = int(page or 1)  # page = == page = 1 과 동일하게 만들어준다.
-    page_size = 10  # 한페이지에 들어가는 room의 갯수
-    limit = page_size * page
-    offset = limit - page_size
-    all_rooms = models.Room.objects.all()[offset:limit]  # 변수명도 마음대로 #[시작값:리미트]
-    page_count = ceil(
-        models.Room.objects.count() / page_size
-    )  # 페이지 개수 = (모든 방의 갯수/페이지사이즈)
-    return render(
-        request,
-        "rooms/home.html",
-        {
-            "potato": all_rooms,
-            "page": page,
-            "page_count": page_count,
-            "page_range": range(1, page_count + 1),
-        },
-    )  # {이 딕션에 있는 변수만이 템플릿에서 호출할 수 있다.}
+    page = request.GET.get("page")
+    room_list = models.Room.objects.all()
+    paginator = Paginator(
+        room_list, 10, orphans=5
+    )  # orphan=5 고아가 5개이하면 이전 페이지에 종속, 5개를 넘어가면 다음페이지 생성
+    rooms = paginator.get_page(page)
+    return render(request, "rooms/home.html", {"rooms": rooms})
+"""
