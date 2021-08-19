@@ -1,4 +1,4 @@
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from django.shortcuts import render
 from . import models
 
@@ -14,9 +14,14 @@ class HomeView(ListView):
     context_object_name = "rooms"
 
 
-def room_detail(request, pk):
-    print(pk)
-    return render(request, "rooms/detail.html")
+class RoomDetail(DetailView):
+    model = models.Room
+
+
+def search(request):
+    city = request.GET.get("city")
+    city = str.capitalize(city)
+    return render(request, "rooms/search.html", {"city": city})
 
 
 """
@@ -30,3 +35,9 @@ def all_rooms(request):  # 함수명 마음대로
     rooms = paginator.get_page(page)
     return render(request, "rooms/home.html", {"rooms": rooms})
 """
+"""def room_detail(request, pk):
+    try:
+        room = models.Room.objects.get(pk=pk)
+        return render(request, "rooms/detail.html", {"room": room})
+    except models.Room.DoesNotExist:
+        return redirect("/")"""

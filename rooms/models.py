@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django_countries.fields import CountryField
 from core import models as core_models
 
@@ -104,6 +105,9 @@ class Room(core_models.TimeStampedModel):  # 코어를 사용함으로써 타임
         # seoul을 입력했을때 첫글자만 대문자로 변환해 Seoul로 변환시켜 저장해줌. OOP와 관련되있음 ,학습필요
         self.city = str.capitalize(self.city)
         super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse("rooms:detail", kwargs={"pk": self.pk})
 
     def total_rating(self):  # 와오 리뷰 평균 점수를 합한 평균
         all_reviews = self.reviews.all()  # ㄷ 리뷰 어드민에 related_name이 있는것 만으로 임포트가 됨
