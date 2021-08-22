@@ -30,7 +30,11 @@ class User(AbstractUser):  # 이미 로그인 기능이 있다.
     )  # 굿~!여기에 업로드 한 사진은 avatar에 저장해줌!
     gender = models.CharField(choices=GENDER_CHOICES, max_length=10, blank=True)
     bio = models.TextField(default="", blank=True)
-    date = models.DateField(null=True)
-    language = models.CharField(choices=LANGUAGE_CHOICES, max_length=3, blank=True)
-    currency = models.CharField(choices=CURRENCY_CHOICES, max_length=3, blank=True)
+    birthday = models.DateField(null=True)
+    language = models.CharField(
+        choices=LANGUAGE_CHOICES, max_length=3, blank=True, default=LANGUAGE_KOR
+    )
+    currency = models.CharField(
+        choices=CURRENCY_CHOICES, max_length=3, blank=True, default=CURRENCY_KRW
+    )
     superhost = models.BooleanField(default=False)
