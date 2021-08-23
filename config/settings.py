@@ -144,3 +144,13 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 MEDIA_ROOT = BASE_DIR / "uploads"  # 사용자 업로드 파일을 저장할 디렉토리의 절대 파일 시스템 경로 입니다.
 
 MEDIA_URL = "/media/"  # 절대경로, 상대경로는 무엇인가
+
+
+# Email Configuration
+
+EMAIL_HOST = "smtp.mailgun.org"
+EMAIL_PORT = "587"
+EMAIL_HOST_USER = os.environ.get("MAILGUN_USERNAME")
+EMAIL_HOST_PASSWORD = os.environ.get("MAILGUN_PASSWORD")
+EMAIL_FROM = "noreply@sandboxceaf67468317414c8288f0bac8ee1f35.mailgun.org"
+# 도메인(@이후)는 형식이 다음과 같아야함
