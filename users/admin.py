@@ -17,10 +17,11 @@ class CustomUserAdmin(UserAdmin):
                     "avatar",
                     "gender",
                     "bio",
-                    "date",
+                    "birthday",
                     "language",
                     "currency",
                     "superhost",
+                    "login_method",
                 )
             },
         ),
@@ -38,5 +39,8 @@ class CustomUserAdmin(UserAdmin):
         "superhost",
         "is_staff",
         "is_superuser",
+        "email_verified",
+        "email_secret",
+        "login_method",
     )  # 리스트 디스플레이를 하지 않으면 장고가 자기 마음대로 디스플레이를 한다. 그게 바로 UserAdmin.list_display
     # 이 리스트중에 우리가 커스텀한 것도, UserAdmin에 기본 탑재된 것들도 있다.
