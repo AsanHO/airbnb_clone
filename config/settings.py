@@ -133,6 +133,8 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+
 AUTH_USER_MODEL = "users.User"
 
 # Default primary key field type
@@ -141,7 +143,8 @@ AUTH_USER_MODEL = "users.User"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-MEDIA_ROOT = BASE_DIR / "uploads"  # 사용자 업로드 파일을 저장할 디렉토리의 절대 파일 시스템 경로 입니다.
+MEDIA_ROOT = os.path.join(BASE_DIR / "uploads")
+# 사용자 업로드 파일을 저장할 디렉토리의 절대 파일 시스템 경로 입니다.
 
 MEDIA_URL = "/media/"  # 절대경로, 상대경로는 무엇인가
 
