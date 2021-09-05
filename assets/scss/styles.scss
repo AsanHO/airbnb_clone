@@ -2,7 +2,7 @@
 @tailwind components;
 
 .search-box{
-    background-color: green;
+  transition: box-shadow 0.2s linear;
 }
 
 .nav_link {

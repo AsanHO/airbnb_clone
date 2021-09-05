@@ -12,7 +12,7 @@ const css = () => {
         .pipe(sass().on("error", sass.logError))
         .pipe(postCSS([require("tailwindcss"), require("autoprefixer")]))
         .pipe(minify())
-        .pipe(gulp.dest("static/csss"));
+        .pipe(gulp.dest("static/css"));
 }
 
 exports.default = css;
