@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{% static 'css/styles.css'%}">
   </head>
   <body class=" text-gray-800 mt-24 font-light ">
+    {% include 'partials/messages.html' %}
     <header class="container max-w-full flex items-center justify-between px-6 h-20 border-solid border-b border-gray-200 fixed bg-white inset-0">
       <div class="flex items-center w-6/12">
         <a href="{% url "core:home" %}">

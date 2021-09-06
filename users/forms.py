@@ -1,5 +1,4 @@
 from django import forms
-from django.forms import widgets
 from . import models
 
 
@@ -46,13 +45,15 @@ class SignUpForm(forms.ModelForm):
         widget=forms.PasswordInput(attrs={"placeholder": "Confirm Password"})
     )
 
-    """def clean_email(self):
+    def clean_email(self):
         email = self.cleaned_data.get("email")
         try:
             models.User.objects.get(email=email)
-            raise forms.ValidationError("User already exists with that email")
+            raise forms.ValidationError(
+                "That email is already taken", code="existing_user"
+            )
         except models.User.DoesNotExist:
-            return email"""
+            return email
 
     def clean_password1(self):
         password = self.cleaned_data.get("password")
