@@ -6,15 +6,28 @@
 
 
 {% block search-bar %}
-    
 {% endblock search-bar %}
     
 
 {% block content %}
-    {% include 'partials/social_login.html' %}
-    <form method="POST" action="{% url "users:login"%}">
-        {% csrf_token %}
-        <!-- 
+    <div class=" container mx-auto flex flex-col lg:w-5/12 md:w-1/2 xl:w-1/4 items-center border
+     border-gray-400 mb-4 py-7 px-7">
+        {% include 'partials/social_login.html' %}
+        <form method="POST" action="{% url "users:login"%}">
+            {% csrf_token %}
+            {{form.email}}
+            {{form.password}}
+            <button class="btn bg-red-500 text-white">Login</button>
+        </form>
+        <div class="mt-5">
+            <span class="mr-2">Don't have an account?</span>
+            <a href="{% url 'users:signup' %}" class="text-green-500 font-medium">Sign up</a>
+        </div>
+    </div>
+    
+    
+{% endblock content %}
+<!-- 
 <form> 태그의 method 속성은 폼 데이터(form data)가 서버로 제출될 때 사용되는 HTTP 메소드를 명시합니다.
 
 method 속성은 속성값으로는 GET과 POST 두 가지 중 하나를 선택할 수 있습니다.
@@ -28,8 +41,3 @@ POST 방식은 폼 데이터를 별도로 첨부하여 서버로 전달하는 �
 POST 방식의 HTTP 요청은 브라우저에 의해 캐시되지 않으므로, 브라우저 히스토리에도 남지 않습니다.
 또한, POST 방식의 HTTP 요청에 의한 데이터는 쿼리 문자열과는 별도로 전송됩니다.
 따라서 데이터의 길이에 대한 제한도 없으며, GET 방식보다 보안성이 높습니다. -->
-        {{form.as_p}}
-        <button>Login</button>
-    </form>
-    
-{% endblock content %}
