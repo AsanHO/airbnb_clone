@@ -121,3 +121,7 @@ class Room(core_models.TimeStampedModel):  # 코어를 사용함으로써 타임
     def first_photo(self):
         (photo,) = self.photos.all()[:1]
         return photo.file.url
+
+    def get_next_four_photos(self):
+        photos = self.photos.all()[1:5]
+        return photos

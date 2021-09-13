@@ -18,11 +18,23 @@
   @apply text-center rounded-sm py-5 font-light text-lg w-full px-32;
 }
 
-input {
+.btn-link{
+  @apply text-center py-3 font-light text-lg w-full rounded-lg bg-red-400;
+}
+
+
+
+input,
+textarea,
+select {
   @apply rounded-sm mb-2 py-5 font-light text-lg w-full text-left border border-gray-600 px-5;
   &:focus {
     @apply outline-none border-red-500;
   }
+}
+
+select{
+  height: 50px;
 }
 
 form {
@@ -70,4 +82,7 @@ form {
   }
 }
 
+.border-section{
+  @apply border-b border-gray-300 pb-8 mt-8;
+}
 @tailwind utilities;
