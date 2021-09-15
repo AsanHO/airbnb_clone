@@ -1,6 +1,14 @@
-from django.views.generic import ListView, DetailView, View, UpdateView
-from django.shortcuts import render
+from django.core.checks import messages
+from django.forms.forms import Form
+from django.http import Http404
+from django.views.generic import ListView, DetailView, View, UpdateView, FormView
+from django.contrib import messages
+from django.shortcuts import render, redirect, reverse
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
+from django.contrib.messages.views import SuccessMessageMixin
+from django.views.generic.edit import CreateView
+from users import mixins as user_mixins
 from . import models, forms
 
 
@@ -107,7 +115,7 @@ class SearchView(View):
         )
 
 
-class EditRoomView(UpdateView):
+class EditRoomView(user_mixins.LogInOnlyView, UpdateView):
 
     model = models.Room
     template_name = "rooms/room_edit.html"
@@ -131,21 +139,76 @@ class EditRoomView(UpdateView):
         "house_rules",
     )
 
+    def get_object(self, queryset=None):
+        room = super().get_object(queryset=queryset)
+        if room.host.pk != self.request.user.pk:
+            raise Http404()  # 보안
+        return room
 
-"""
 
-def all_rooms(request):  # 함수명 마음대로
-    page = request.GET.get("page")
-    room_list = models.Room.objects.all()
-    paginator = Paginator(
-        room_list, 10, orphans=5
-    )  # orphan=5 고아가 5개이하면 이전 페이지에 종속, 5개를 넘어가면 다음페이지 생성
-    rooms = paginator.get_page(page)
-    return render(request, "rooms/home.html", {"rooms": rooms})
-"""
-"""def room_detail(request, pk):
+class RoomPhotoView(user_mixins.LogInOnlyView, RoomDetail):
+
+    model = models.Room
+    template_name = "rooms/room_photos.html"
+
+    def get_object(self, queryset=None):
+        room = super().get_object(queryset=queryset)
+        if room.host.pk != self.request.user.pk:
+            raise Http404()  # 보안
+        return room
+
+
+@login_required
+def delete_photo(request, room_pk, photo_pk):
+    user = request.user
     try:
-        room = models.Room.objects.get(pk=pk)
-        return render(request, "rooms/detail.html", {"room": room})
+        room = models.Room.objects.get(pk=room_pk)
+        if room.host.pk != user.pk:
+            messages.error(request, "Cant delete that photo")
+        else:
+            models.Photo.objects.filter(pk=photo_pk).delete()
+            messages.success(request, "Photo Deleted")
+        return redirect(reverse("rooms:photos", kwargs={"pk": room_pk}))
     except models.Room.DoesNotExist:
-        return redirect("/")"""
+        return redirect(reverse("core:home"))
+
+
+class EditPhotoView(user_mixins.LogInOnlyView, SuccessMessageMixin, UpdateView):
+    model = models.Photo
+    template_name = "rooms/photo_edit.html"
+    pk_url_kwarg = "photo_pk"
+    success_message = "photo updated"
+    fields = ("caption",)
+
+    def get_success_url(self):
+        room_pk = self.kwargs.get("room_pk")
+        return reverse("rooms:photos", kwargs={"pk": room_pk})
+
+
+class AddPhotoView(user_mixins.LogInOnlyView, FormView):
+    model = models.Photo
+    template_name = "rooms/photo_add.html"
+    fields = (
+        "caption",
+        "file",
+    )
+    form_class = forms.CreatePhotoFrom
+
+    def form_valid(self, form):
+        pk = self.kwargs.get("pk")
+        form.save(pk)
+        messages.success(self.request, "Photo Uploaded")
+        return redirect(reverse("rooms:photos", kwargs={"pk": pk}))
+
+
+class CreateRoomView(user_mixins.LogInOnlyView, FormView):
+    form_class = forms.CreateRoomFrom
+    template_name = "rooms/room_create.html"
+
+    def form_valid(self, form):
+        room = form.save()
+        room.host = self.request.user
+        room.save()
+        form.save_m2m()  # 아주중요!
+        messages.success(self.request, "Room Uploaded")
+        return redirect(reverse("rooms:detail", kwargs={"pk": room.pk}))

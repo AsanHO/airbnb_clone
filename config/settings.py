@@ -157,3 +157,8 @@ EMAIL_HOST_USER = os.environ.get("MAILGUN_USERNAME")
 EMAIL_HOST_PASSWORD = os.environ.get("MAILGUN_PASSWORD")
 EMAIL_FROM = "noreply@sandboxceaf67468317414c8288f0bac8ee1f35.mailgun.org"
 # 도메인(@이후)는 형식이 다음과 같아야함
+
+
+# Auth
+
+LOGIN_URL = "/users/login"

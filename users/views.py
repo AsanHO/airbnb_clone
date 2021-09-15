@@ -6,6 +6,7 @@ from django.views.generic import FormView, DetailView, UpdateView
 from django.urls import reverse_lazy
 from django.shortcuts import redirect, reverse
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
 from django.contrib import messages
 from . import forms, models, mixins
@@ -260,3 +261,12 @@ class UpdatePasswordView(
 
     def get_success_url(self):
         return self.request.user.get_absoulute_url()
+
+
+@login_required
+def switch_hosting(request):
+    try:
+        del request.session["is_hosting"]  # 호스트 모드 off
+    except KeyError:
+        request.session["is_hosting"] = True  # 호스트 모드 on
+    return redirect(reverse("core:home"))
