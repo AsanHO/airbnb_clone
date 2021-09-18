@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models.deletion import CASCADE
 from core import models as core_models
 
@@ -9,12 +10,22 @@ class Review(core_models.TimeStampedModel):
     """Review Model Definition"""
 
     review = models.TextField()
-    accuracy = models.IntegerField()
-    communication = models.IntegerField()
-    cleanliness = models.IntegerField()
-    location = models.IntegerField()
-    check_in = models.IntegerField()
-    value = models.IntegerField()
+    accuracy = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )
+    communication = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )
+    cleanliness = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )
+    location = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )
+    check_in = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )
+    value = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     user = models.ForeignKey("users.User", related_name="reviews", on_delete=CASCADE)
     room = models.ForeignKey("rooms.Room", related_name="reviews", on_delete=CASCADE)
 
@@ -31,3 +42,6 @@ class Review(core_models.TimeStampedModel):
             + self.value
         ) / 6
         return round(avg, 2)  # 소수점 두자리까지만 리턴함
+
+    class Meta:
+        ordering = ("-created",)

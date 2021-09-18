@@ -18,3 +18,8 @@ class ReservationAdmin(admin.ModelAdmin):
         "in_progress",
         "in_finished",
     )
+
+
+@admin.register(models.BookedDay)
+class BookedDayAdmin(admin.ModelAdmin):
+    list_display = ("day", "reservation")
