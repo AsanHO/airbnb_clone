@@ -1,4 +1,5 @@
 import uuid
+from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -17,17 +18,17 @@ class User(AbstractUser):  # 이미 로그인 기능이 있다.
     GENDER_OTHER = "other"
     # 선언
     GENDER_CHOICES = (
-        (GENDER_MALE, "Male"),
-        (GENDER_FEMALE, "Female"),
-        (GENDER_OTHER, "Other"),
+        (GENDER_MALE, _("Male")),
+        (GENDER_FEMALE, _("Female")),
+        (GENDER_OTHER, _("Other")),
     )  # (a,b) a는 데이터 베이스, b는 form값에 반영된다.
 
     """LANGUAGE CHOICES"""
     LANGUAGE_ENG = "en"
     LANGUAGE_KOR = "kr"
     LANGUAGE_CHOICES = (
-        (LANGUAGE_ENG, "english"),
-        (LANGUAGE_KOR, "korean"),
+        (LANGUAGE_ENG, _("English")),
+        (LANGUAGE_KOR, _("Korean")),
     )
 
     """CURRENCY CHOICES"""
@@ -51,12 +52,15 @@ class User(AbstractUser):  # 이미 로그인 기능이 있다.
     avatar = models.ImageField(
         blank=True, upload_to="avatar"
     )  # 굿~!여기에 업로드 한 사진은 avatar에 저장해줌!
-    gender = models.CharField(choices=GENDER_CHOICES, max_length=10, blank=True)
-    bio = models.TextField(default="", blank=True)
+    gender = models.CharField(
+        _("gender"), choices=GENDER_CHOICES, max_length=10, blank=True
+    )
+    bio = models.TextField(_("bio"), blank=True)
     birthday = models.DateField(null=True)
     language = models.CharField(
+        _("language"),
         choices=LANGUAGE_CHOICES,
-        max_length=3,
+        max_length=2,
         blank=True,
         default=LANGUAGE_KOR,
     )
@@ -86,7 +90,7 @@ class User(AbstractUser):  # 이미 로그인 기능이 있다.
                 "emails/verify_email.html", {"secret": secret}
             )
             send_mail(  # https://docs.djangoproject.com/en/3.2/topics/email/
-                "Verify Airbnb Account",
+                _("Verify Airbnb Account"),
                 strip_tags(html_message),  # html에서 텍스트만 추출
                 settings.EMAIL_FROM,
                 [self.email],

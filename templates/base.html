@@ -33,5 +33,12 @@
     
     {%include "partials/footer.html" %}
   </body>
-  <script src="https://kit.fontawesome.com/7e06f7a03e.js" crossorigin="anonymous"></script>
+  <script>
+    const langSelect = document.getElementById("js-lang");
+    const handleLangChange = () => {
+        const selected = langSelect.value;
+        fetch(`{% url 'users:switch-language' %}?lang=${selected}`).then(() => window.location.reload());
+    }
+    langSelect.addEventListener("change", handleLangChange);
+  </script>
 </html>
