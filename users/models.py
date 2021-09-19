@@ -7,6 +7,7 @@ from django.core.mail import send_mail
 from django.utils.html import strip_tags
 from django.shortcuts import reverse
 from django.template.loader import render_to_string  # load templates and render
+from core import managers as core_managers
 
 
 class User(AbstractUser):  # 이미 로그인 기능이 있다.
@@ -78,6 +79,7 @@ class User(AbstractUser):  # 이미 로그인 기능이 있다.
         choices=LOGIN_CHOICES,
         default=LOGIN_EMAIL,
     )
+    objects = core_managers.CustomModelManager()
 
     def get_absolute_url(self):
         return reverse("users:profile", kwargs={"pk": self.pk})
